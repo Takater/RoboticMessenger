@@ -10,13 +10,13 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
 from models import Message
+from windows import Window
 from urllib.parse import quote as url_parse
 from datetime import datetime
 
 import time
 import os
 import math
-import tkinter as Tk
 
 
 # Main function
@@ -84,6 +84,10 @@ def main ():
                 continue
 
         print(hasTips)
+
+        window = Window()
+
+        window.alert_window()
 
         # For each patient in found data
         for patient in patients:
