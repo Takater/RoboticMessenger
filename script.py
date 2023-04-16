@@ -29,9 +29,11 @@ def main ():
     SPREADSHEET_ID = "1QyxUDa039jEmNGHZXCWcjh6eZ0srBN6Dz_QOuCMhyoA" 
     PACIENTES_RANGE = 'Pacientes!A2:H'
     CONTATOS_RANGE = 'Contatos!A2:C'
+
+    window = Window()
     
 
-    creds = None
+    """creds = None
     # The file token.json stores the user's access and refresh tokens, and is
     # created automatically when the authorization flow completes for the first
     # time.
@@ -142,49 +144,8 @@ def main ():
                     continue    
             
     except HttpError as err:
-        print(err)
+        print(err)"""
 
-    """
-    # Get user folder path
-    user = os.environ["USERPROFILE"]
-
-    # Get Chrome user data path
-    chrome_data_dir = os.path.join(user, "AppData", "Local", "Google", "Chrome", "User Data")
-
-    # Set options object
-    options = webdriver.ChromeOptions()
-
-    # Include user data folder path
-    options.add_argument(f'--user-data-dir={chrome_data_dir}')
-
-    # Set user profile path to Default
-    options.add_argument('--profile-directory=Default')
-    
-    # Try to start driver
-    try:
-        # Open chrome with user profile
-        chrome = webdriver.Chrome(options=options)
-
-        # Start whatsapp
-        chrome.get("https://web.whatsapp.com")
-
-        time.sleep(10)
-
-        chrome.quit()
-
-    # Exception for profile in use
-    except WebDriverException:
-
-        # Import ctypes module
-        import ctypes
-
-        # Message box for user
-        ctypes.windll.user32.MessageBoxW(0, "Por favor, feche todas as janelas do Google Chrome.", "Navegador em uso", 48)
-
-        # Log exception and return
-        print("Finalizado por navegador em uso")
-        return
-    """
 # Run main when executed
 if __name__ == "__main__":
     main()
