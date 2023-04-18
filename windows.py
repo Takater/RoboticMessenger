@@ -41,14 +41,18 @@ class Window:
         see_worksheet = ttk.Button(self.root, text="Ver planilha", command=self.open_worksheet)
         see_worksheet.pack()
         
+        edit_messages = ttk.Button(self.root, text="Editar mensagens", command=self.edit_messages)
+        edit_messages.pack()
+
         patients_messages = ttk.Button(self.root, text="Enviar mensagens para Pacientes", command=lambda: self.messages(sheet='Pacientes'))
         patients_messages.pack()
 
         contacts_messages = ttk.Button(self.root, text="Enviar mensagens para Contatos", command=lambda: self.messages(sheet='Contatos'))
         contacts_messages.pack()
 
-        edit_messages = ttk.Button(self.root, text="Editar mensagens", command=self.edit_messages)
-        edit_messages.pack()
+        quit_button = ttk.Button(self.root, text="Sair", command=lambda: self.root.quit())
+        quit_button.pack()
+
 
         return
         

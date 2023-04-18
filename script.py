@@ -14,12 +14,11 @@ from selenium.webdriver.common.keys import Keys
 from pathlib import Path
 from selenium.common.exceptions import WebDriverException
 
-
 from models import Message
 from urllib.parse import quote as url_parse
-from datetime import datetime
+from datetime import datetime, timedelta
 
-import time, os, sys, math
+import time, os, sys, math, pandas as pd
 
 # If modifying these scopes, delete the file token.json.
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
@@ -29,7 +28,7 @@ SPREADSHEET_ID = "1QyxUDa039jEmNGHZXCWcjh6eZ0srBN6Dz_QOuCMhyoA"
 PACIENTES_RANGE = 'Pacientes!A2:H'
 CONTATOS_RANGE = 'Contatos!A2:C'
 
-def send_messages():
+def send_messages(sheet = None):
         
     # Google Sheets Credentials variable
     creds = None
@@ -58,6 +57,97 @@ def send_messages():
 
         # Retrieve all spreadsheets
         sheets = service.spreadsheets()
+
+        def patients_messages():
+
+            patients_worksheet = sheets.values().get(
+            spreadsheetId=SPREADSHEET_ID,
+            range=PACIENTES_RANGE).execute()
+
+            patients_data = patients_worksheet.get('values', [])
+
+            if not patients_data:
+                 message_box("info", "Planilha sem dados", "Nenhum dado encontrado na planilha")
+                 return
+            
+            def one_day_away(date_tuple):
+                 if date_tuple:
+                    consulta_date = date_tuple[0]
+                    one_day_away = datetime.now().date() + timedelta(days=1)
+                    return consulta_date.date() == one_day_away
+
+            # Set datetimes for row
+            def set_datetimes(row_str):    
+                    if row_str:
+                        date_str, time_str = row_str.split(", ")
+                        date = datetime.strptime(date_str, "%d/%m/%Y")
+                        return (date, time_str)
+            
+            patients_table = pd.DataFrame(patients_data)
+
+            patients_table["Consulta"] = patients_table["Consulta"].apply(set_datetimes)
+            patients_table["Cortesia"] = patients_table["Cortesia"].apply(set_datetimes)
+            
+            consultas = patients_table[patients_table["Consulta"].apply(one_day_away)]
+
+            cortesias = patients_table[patients_table["Cortesia"].apply(one_day_away)]
+
+            plantao = patients_table[patients_table["Plantão"].apply(lambda value: value == 'TRUE')]
+
+            missoes = patients_table[patients_table["Missões"].apply(lambda value: value == 'TRUE')]
+
+            dicas = patients_table[patients_table["Dicas"].apply(lambda value: value == 'TRUE')]
+
+            feedback = patients_table[patients_table["1ª Consulta"].apply(lambda value: value == 'TRUE')]
+
+            for list in [consultas, cortesias, plantao, missoes, dicas, feedback]:
+                for each in list:
+                      
+                    nome = each['Nome']
+                    phone = each['Telefone']
+                    type_message = ''
+                    message = None
+
+                    if list in [consultas, cortesias]:
+                        data = None
+                        horario = ''
+
+                        if list is consultas:
+                            type_message = 'CONFIRMAR CONSULTA'
+                            data, horario = each['Consulta'][0], each['Consulta'][1]
+
+                        elif list is cortesias:
+                            type_message = 'CONFIRMAR CORTESIA'
+                            data, horario, each['Cortesia'][0], each['Cortesia'][1]
+                 
+                        message = Message(type_message, name=nome, date=data, hour=horario)
+
+                    else:
+                        type_message = 'PLANTAO' if list is plantao else (
+                            'MISSOES' if list is missoes else (
+                            'DICAS' if list is dicas else 'FEEDBACK'
+                            )
+                        )
+                        
+                        message = Message(type_message, name=nome)
+
+                    url = "https://api.whatsapp.com/send?phone=55" + phone + "&text=" + url_parse(message)
+
+                    chrome = start_driver()
+
+                    chrome.get(url)
+
+                    time.sleep(20)
+
+                    chrome.quit()
+
+            
+
+            
+            
+
+        def contacts_messages():
+             "Send messages to contacts"
 
     except HttpError as err:
         print(err)

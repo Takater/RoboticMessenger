@@ -1,0 +1,19 @@
+{
+    "PACIENTES" : {
+        "CONSULTA": "Olá {{nome}}! Bom dia, tudo bem? \nEstou entrando em contato para confirmar a sua consulta de acompanhamento nutricional agendada para {{data}} às {{horario}}, com a Nutricionista Raynara Santos. \n\nTemos uma tolerância de atraso de 15 minutos para as consultas. Isso significa que se você chegar até 15 minutos após o horário marcado, sua consulta será realizada normalmente, sem nenhuma penalidade. \n\nNo entanto, caso o atraso seja superior a 15 minutos, sua consulta será automaticamente cancelada e você entrará na fila de espera para remarcação. Isso é necessário para garantir a pontualidade e bom atendimento a todos os nossos pacientes. \n\nAgradecemos sua compreensão e contamos com sua colaboração para que possamos manter uma agenda organizada e eficiente. \n\nAtenciosamente, \nConsultório Raynara Santos.",
+        "CORTESIA": "Olá {{nome}}! Bom dia, tudo bem? \nEstou entrando em contato para confirmar a sua sessão de cortesia agendada para {{data}} às {{horario}}, com a Nutricionista Raynara Santos. \n\nTemos uma tolerância de atraso de 15 minutos para as consultas. Isso significa que se você chegar até 15 minutos após o horário marcado, sua consulta será realizada normalmente, sem nenhuma penalidade. \n\nNo entanto, caso o atraso seja superior a 15 minutos, sua consulta será automaticamente cancelada e você entrará na fila de espera para remarcação. Isso é necessário para garantir a pontualidade e bom atendimento a todos os nossos pacientes. \n\nAgradecemos sua compreensão e contamos com sua colaboração para que possamos manter uma agenda organizada e eficiente. \n\nAtenciosamente, \nConsultório Raynara Santos.",
+        "PLANTAO": "Olá, {{nome}}! Boa tarde, tudo bem? \n\nEspero que você esteja bem e seguindo o seu plano alimentar com disciplina e comprometimento. Gostaria de saber como foi a sua semana e como o plano alimentar está funcionando para você. Em relação à última semana, você conseguiu seguir o plano sem dificuldades ou encontrou algum desafio ao longo do caminho?",
+        "MISSOES": "Olá, {{nome}}! Bom dia, tudo bem? \n\nEspero que você esteja bem! Estou animada em compartilhar com você uma nova missão/desafio na área de conteúdos no nosso aplicativo Numax! Acredito que você vai adorar participar e se desafiar para alcançar o seu objetivo de emagrecimento. Não esqueça de preencher o questionário da fase em que você está, para que seja possível a contabilização dos seus pontos para ganhar mimos no Shopping da Nutri. \n\nSe tiver alguma dúvida ou precisar de assistência adicional, não hesite em entrar em contato comigo. \nTenha um ótimo dia! \n\nAtenciosamente, \nNutricionista Raynara Santos.",
+        "DICAS": {
+            "file": "",
+            "text": ""
+        },
+        "FEEDBACK": "Olá {{nome}}! Bom dia, tudo bem? \n\nAgradeço por me escolher como sua nutricionista e por confiar em meu trabalho para cuidar de sua saúde e bem-estar. Para mim, é essencial garantir que você tenha a melhor experiência possível em sua consulta. \n\nPara me ajudar a aprimorar os serviços que forneço, gostaria de convidá-lo(a) a participar de um breve questionário de feedback sobre o atendimento que você recebeu. Suas opiniões são valiosas e me ajudarão a identificar oportunidades de melhoria. \n\nPeço que responda honestamente às seguintes perguntas: \n\n1. O que você achou do atendimento que recebeu? \n2. Ficou faltando alguma coisa? O que pode ser melhorado? \n3. Quais foram os pontos fortes da consulta? \n4. De 0 a 10, qual a possibilidade de você indicar nosso trabalho? \n\nSua opinião é fundamental para mim e será tratada de forma confidencial. Agradeço antecipadamente por dedicar um momento do seu tempo para fornecer seu feedback. \n\nAtenciosamente, \nNutricionista Raynara Santos"
+    },
+
+    "CONTATOS": {
+        "file": "",
+        "text": ""
+    }
+
+}
