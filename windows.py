@@ -1,6 +1,6 @@
 import os, time
 
-from script import send_messages, start_driver, SPREADSHEET_ID
+from script import send_messages, start_driver, message_box,SPREADSHEET_ID
 
 from tkinter import *
 from tkinter import ttk
@@ -18,14 +18,17 @@ class Window:
         self.root.config(background = "#2f0f07")
 
         image = Image.open("./raynara-logo.png")
-        photo = ImageTk.PhotoImage(image)
+        photo = ImageTk.PhotoImage(image.resize((300, 150), Image.ANTIALIAS))
 
-        logo = Label(self.root, image=photo, background="#2f0f07", height=250)
+        logo = Label(self.root, image=photo, background="#2f0f07")
         logo.pack()
         
         # Set style
         style = ttk.Style()
-        style.configure(".", pady=100, padx=20, font=("Arial", 18))
+        style.configure(".", font=("Arial", 18))
+        style.theme_use('alt')
+        style.configure("TButton", background='#2f0f07', padding = "30 10 30 10", foreground="#ccc", borderwidth="0", font=("Arial", 12))
+        style.map('TButton', background=[('active', '#280700')], foreground=[('active', '#eab676')])
 
         # Open Main menu
         self.main_menu()
@@ -75,11 +78,21 @@ class Window:
         # Clear window
         self.clear_window()
 
-        label = ttk.Label(self.root, text=f"Enviando mensagens para {sheet}...", font=('Arial', 12))
+        label = ttk.Label(self.root, text=f"Enviando mensagens \npara {sheet}...", font=('Arial', 32), background="#2f0f07", foreground="#ccc", padding="30 50 30 0")
         label.pack()
 
-        send_messages(sheet)
+        result = send_messages(sheet)
 
+        if result:
+            if type(result) == int:
+                if result == 200:
+                    message_box("info", "Resultados de Envio", f"Mensagens enviadas para {sheet} com sucesso.")
+            else:
+                result()
+
+        self.clear_window()
+        self.main_menu()
+        
         return
 
     def clear_window(self):

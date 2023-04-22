@@ -67,14 +67,15 @@ def send_messages(sheet = None):
             patients_data = patients_worksheet.get('values', [])
 
             if not patients_data:
-                 message_box("info", "Planilha sem dados", "Nenhum dado encontrado na planilha")
-                 return
+                if sheet:
+                    return message_box("info", "Planilha sem dados", "Nenhum dado encontrado na planilha")
+                return 404
             
-            def one_day_away(date_tuple):
+            def days_away(date_tuple, days):
                  if date_tuple:
                     consulta_date = date_tuple[0]
-                    one_day_away = datetime.now().date() + timedelta(days=1)
-                    return consulta_date.date() == one_day_away
+                    days_away = [datetime.now().date() + timedelta(days=day) for day in days]
+                    return consulta_date.date() in days_away
 
             # Set datetimes for row
             def set_datetimes(row_str):    
@@ -83,14 +84,20 @@ def send_messages(sheet = None):
                         date = datetime.strptime(date_str, "%d/%m/%Y")
                         return (date, time_str)
             
-            patients_table = pd.DataFrame(patients_data)
+            patients_table = pd.DataFrame(patients_data, columns=['Nome', 'Telefone', 'Consulta', 'Cortesia', 'Plantão', 'Missões', 'Dicas', '1ª Consulta'])
+            patients_table = patients_table[patients_table["Nome"] != '']
 
             patients_table["Consulta"] = patients_table["Consulta"].apply(set_datetimes)
             patients_table["Cortesia"] = patients_table["Cortesia"].apply(set_datetimes)
             
-            consultas = patients_table[patients_table["Consulta"].apply(one_day_away)]
+            # Get appointments within the limit
+            consultas = patients_table[patients_table["Consulta"] != '']        # Non empty rows
+            consultas["Consulta"] = consultas["Consulta"].apply(lambda row: days_away(row, [1, 7]))      # Check 1 or 7 days away for each row
+            consultas = consultas[consultas["Consulta"] == True]                # Get only true
 
-            cortesias = patients_table[patients_table["Cortesia"].apply(one_day_away)]
+            cortesias = patients_table[patients_table["Cortesia"].apply(lambda row: days_away(row, [1]))]
+            message_box("info", "title", str(cortesias))
+
 
             plantao = patients_table[patients_table["Plantão"].apply(lambda value: value == 'TRUE')]
 
@@ -140,17 +147,40 @@ def send_messages(sheet = None):
                     time.sleep(20)
 
                     chrome.quit()
-
             
-
+            return 200
             
-            
-
         def contacts_messages():
-             "Send messages to contacts"
+             
+            contacts_worksheet = sheets.values().get(
+            spreadsheetId=SPREADSHEET_ID,
+            range=CONTATOS_RANGE).execute()
+
+            contacts_data = contacts_worksheet.get('values', [])
+
+            if not contacts_data:
+                if sheet:
+                    return message_box("info", "Planilha sem dados", "Nenhum dado encontrado na planilha")
+                return 404
+            
+            return 200
+
+        # Send messages
+        if sheet:
+
+            # If sheet, run only one of functions
+            if sheet == 'Pacientes':
+                return patients_messages()
+            
+            if sheet == 'Contatos':
+                return contacts_messages()
+            
+        # Else, run both
+        else:
+            return [patients_messages(), contacts_messages()]
 
     except HttpError as err:
-        print(err)
+        return message_box("error", "Erro", err) if sheet else print(err)
 
 def message_box(type, title, message):
         

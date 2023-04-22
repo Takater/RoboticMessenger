@@ -5,7 +5,7 @@ from script import send_messages
 
 def main():
     if len(sys.argv) == 1:
-        window = Window()
+        Window()
 
     else:
         send_messages()
