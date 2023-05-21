@@ -1,2 +1,7 @@
 credentials.json
 token.json
+dist/
+build/
+__pycache__/
+Ray Robot.spec
+Setup.docx

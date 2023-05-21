@@ -1,12 +1,11 @@
-import json
+import json, shutil, os, codecs
 
 # Models variable
 models = {}
 
 # Set models
-with open('message_models.json', 'r') as file:
+with codecs.open('message_models.json', 'r', encoding="utf-8") as file:
     models = json.load(file)
-
 
 # Messages Model 
 class Message:
@@ -30,58 +29,130 @@ class Message:
             # Get correct message model from models according to the second piece of type
             message_model = models["PACIENTES"][type.split()[1]]
 
-            # Return model with name, date and time
-            return message_model.replace("{{nome}}", name).replace("{{data}}", date).replace("{{horario}}", hour)
+            # Set message to model with name, date and time
+            self.message = message_model.replace("{{nome}}", name).replace("{{data}}", date).replace("{{horario}}", hour)
+            return
         
         # If another column
         else:
 
             # Retrieve correct message model from models, according to type
-            message_model = models['PACIENTES'][type] if (
+            if type not in ['DICAS', 'CONTATOS']:
                 
-                type not in ['DICAS', 'CONTATO']       #  If true, above result
-                
-                ) else models['PACIENTES'][type]['text']    #   Object's text
+                # Regular patient types
+                message_model = models['PACIENTES'][type] 
 
-            # Return model with name
-            return message_model.replace("{{nome}}", name)
-    
-    # Get models function
-    def get_model(type = None):
-        
-        # Return all models or specific one
-        return models if not type else models[type]
-    
-    # Edit models function
-    def edit_model(model, **model_data):
-        
-        # Set models dictionary
-        models = {}
+            # If tips
+            elif type == 'DICAS':
 
-        # Get new text 
-        new_text = model_data.get("new_text")
-        
+                # Set message
+                message_model = models['PACIENTES'][type]['text'] 
+
+                # Set image file
+                self.image = models['PACIENTES'][type]['file']
+            
+            # If contact
+            else:
+                # Set message
+                message_model = models[type]['text']
+
+                # Set image file
+                self.image = models[type]['file']
+
+            # Set message to model with name
+            self.message = message_model.replace("{{nome}}", name)
+
+            # Finish initiating function
+            return
+    
+# Get models function
+def get_model(type = None):
+
+    global models
+
+    with codecs.open('message_models.json', 'r', encoding="utf-8") as file:
+        models = json.load(file)
+    
+    # Return all models if no type
+    if not type:
+        return models
+    
+    # Specific type
+    else:
+
+        type = type.upper()
+
+        # Retrieve correct type
+        return models[type] if type == "CONTATOS" else models["PACIENTES"][type]
+    
+# Edit models function
+def edit_model(model, **model_data):
+
+    # Get new text 
+    new_text = model_data.get("new_text")
+    
+    try:
         # Get models
-        with open('message_models.json', "r") as file:
+        with codecs.open('message_models.json', "r", encoding="utf-8") as file:
             models = json.load(file)
         
-        
-        if model not in ['DICAS', 'CONTATO']:
+        # If model is only text
+        if model not in ['DICAS', 'CONTATOS']:
+
             # Overwrite chosen model
-            models[model] = new_text
+            models['PACIENTES'][model] = new_text
         
+        # If model has both file and text
         else:
+
+            # Get new file path
             new_file = model_data.get("new_file")
             
-            if new_file:
-                models[model]['file'] = new_file
+            # If there's a new file
+            if new_file != None:
 
+                # Get file name
+                filename = os.path.basename(new_file)
+
+                # Set destination folder to project's root
+                destination = os.path.normpath(os.path.join(os.getcwd(), 'Files', filename)) if filename else ''
+
+                # Copy file to destination if there's a file
+                if filename:
+                    shutil.copy(new_file, destination)
+
+                # Set file path on models file according to selected model
+                if model == 'CONTATOS':
+                    
+                    # Contatos model
+                    models[model]['file'] = destination
+                else:
+
+                    # Dicas model
+                    models['PACIENTES'][model]['file'] = destination
+
+            # If there's a new text
             if new_text:
-                models[model]['text'] = new_text
 
+                # If Contatos model
+                if model == 'CONTATOS':
+
+                    # Overwrite model's text
+                    models[model]['text'] = new_text
+                
+                # If Dicas model
+                else:
+
+                    # Overwrite model's text
+                    models['PACIENTES'][model]['text'] = new_text
 
         # Overwrite models
-        with open('message_models.json', 'w') as file:
-            json.dump(models, file, indent = 2)
+        with codecs.open('message_models.json', 'w', encoding="utf-8") as file:
+            json.dump(models, file, indent = 2, ensure_ascii=False)
+
+        return 200
+    
+    except:
+        return 500
 
 
