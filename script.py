@@ -10,6 +10,7 @@ from googleapiclient.errors import HttpError
 
 from models import Message
 from datetime import datetime, timedelta
+from windows import message_box
 
 import urllib.parse
 import time, os, pandas as pd
@@ -423,23 +424,6 @@ def send_messages(sheet = None):
 
     except HttpError as err:
         return message_box("error", "Erro", err) if sheet else print(err)
-
-def message_box(type, title, message):
-        
-        # Import messagebox
-        from tkinter import messagebox
-        
-        # If warning
-        if type == 'warning':
-             messagebox.showwarning(title, message)
-
-        # If error
-        elif type == 'error':
-             messagebox.showerror(title, message)
-
-        # If info
-        else:
-             messagebox.showinfo(title, message)
 
 def start_driver():
 
