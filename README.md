@@ -20,30 +20,30 @@ The robotic bulk messaging system is a versitile application designed to streaml
 
 When started, the system opens a window with the **main menu**:
 
-![window](readme_images\main_menu.png)
+![window](readme_images/main_menu.png)
 
-- **Ver planilha** (*See worksheet*): opens the spreadsheet on the browser: ![window](readme_images\see_worksheet.png)
+- **Ver planilha** (*See worksheet*): opens the spreadsheet on the browser: ![window](readme_images/see_worksheet.png)
 - **Editar mensagens** (*Edit messages*): section to edit messages, in the specific use case there were 7 possible types of message (*image 1*), where two of them included the possibility for file addition (*image 2*). When editing message texts, the texts configurations, such as row breaks or font weight changes (\*\*, ~~, __) are saved (*image 3*).
 
-|![window](readme_images\edit_messages.png)|![window](readme_images\file_or_message.png)|![window](readme_images\edit_message.png)|
+|![window](readme_images/edit_messages.png)|![window](readme_images/file_or_message.png)|![window](readme_images/edit_message.png)|
 |-|-|-|
 
 For files (*Arquivo*) the user can select a pdf or image file:
 
-![window](readme_images\file_nofile.png)
-![window](readme_images\file_addedfile.png)
+![window](readme_images/file_nofile.png)
+![window](readme_images/file_addedfile.png)
 
 When editing either texts or files, they need to be saved by clicking on "**Salvar**" (*Save*) button
 
 - **Ativar robô** (*Activate robot*): opens a window with a clock and a timer, counting down to the next ocurrence of the time on the clock. When the countdown is over, it runs the process to send messages and restarts the countdown.
 
-![window](readme_images\clock_9am.png)
-![window](readme_images\clock_330pm.png)
+![window](readme_images/clock_9am.png)
+![window](readme_images/clock_330pm.png)
 
 - **Enviar mensagens para Pacientes** or **para Contatos** (*Send messages to ... or ...*): runs the process to send messages to the specified Sheet from the Worksheet. The process for both is as follows:
 1. Check which users should receive which messages
 2. Opens Whatsapp Web with each one's numbers and corresponding message model, substituting the variables with data from the worksheet:
-![window](readme_images\apiwhats.png)
+![window](readme_images/apiwhats.png)
 3. Attach file, if there is one
 4. Click to send message
 
