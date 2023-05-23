@@ -1,4 +1,4 @@
-import os, time, datetime, math, shutil
+import os, datetime, math
 
 from script import send_messages, start_driver, message_box,SPREADSHEET_ID
 from models import edit_model, get_model

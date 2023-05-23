@@ -1,6 +1,5 @@
 from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
-from pathlib import Path
+from selenium.webdriver.common.by import By
 from selenium.common.exceptions import WebDriverException
 
 from google.auth.transport.requests import Request
@@ -9,17 +8,11 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
-from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.common.by import By
-from pathlib import Path
-from selenium.common.exceptions import WebDriverException
-
 from models import Message
 from datetime import datetime, timedelta
 
 import urllib.parse
-import time, os, sys, math, pandas as pd
+import time, os, pandas as pd
 
 # If modifying these scopes, delete the file token.json.
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
