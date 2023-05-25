@@ -1,10 +1,10 @@
 import os, datetime, math
 
-from script import send_messages, start_driver, SPREADSHEET_ID
+from script import send_messages, start_driver, message_box, SPREADSHEET_ID
 from models import edit_model, get_model
 
 from tkinter import *
-from tkinter import ttk, filedialog, messagebox
+from tkinter import ttk, filedialog
 from PIL import Image, ImageTk
 
 class Window:
@@ -455,18 +455,3 @@ class Window:
             item.destroy()
 
         return
-
-# Message box function
-def message_box(type, title, message):
-        
-        # If warning
-        if type == 'warning':
-             messagebox.showwarning(title, message)
-
-        # If error
-        elif type == 'error':
-             messagebox.showerror(title, message)
-
-        # If info
-        else:
-             messagebox.showinfo(title, message)

@@ -1,16 +1,17 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import WebDriverException
+from tkinter import messagebox
 
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
+from google.auth.exceptions import RefreshError
 
 from models import Message
 from datetime import datetime, timedelta
-from windows import message_box
 
 import urllib.parse
 import time, os, pandas as pd
@@ -36,7 +37,17 @@ def send_messages(sheet = None):
     # If there are no (valid) credentials available, let the user log in.
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
+            
+            # Try to request log in
+            try:
+                creds.refresh(Request())
+
+            # If token is outdated
+            except RefreshError:
+                
+                # Delete token and restart function
+                os.remove("token.json")
+                return send_messages(sheet)
         else:
             flow = InstalledAppFlow.from_client_secrets_file(
                 'credentials.json', SCOPES)
@@ -491,3 +502,18 @@ def retry(action):
 
             # Next loop iteration
             continue
+
+# Message box function
+def message_box(type, title, message):
+        
+        # If warning
+        if type == 'warning':
+             messagebox.showwarning(title, message)
+
+        # If error
+        elif type == 'error':
+             messagebox.showerror(title, message)
+
+        # If info
+        else:
+             messagebox.showinfo(title, message)
